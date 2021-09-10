@@ -9,7 +9,15 @@
             :checked="modelValue == -1"
             @click="$emit('update:modelValue', $event.target.value)"
         />
-        <label :for="widgetId + '-evaluation-option-None'" class="option">None</label>
+        <label
+          :for="widgetId + '-evaluation-option-None'"
+          :class="{
+            option: true,
+            active: modelValue == -1
+          }"
+        >
+          None
+        </label>
         <input
             class="selectopt"
             value="0"
@@ -19,7 +27,15 @@
             :checked="modelValue == 0"
             @click="$emit('update:modelValue', $event.target.value)"
         />
-        <label :for="widgetId + '-evaluation-option-Beginner'" class="option">Beginner</label>
+        <label
+          :for="widgetId + '-evaluation-option-Beginner'"
+          :class="{
+            option: true,
+            active: modelValue == 0
+          }"
+        >
+          Beginner
+        </label>
         <input
             class="selectopt"
             value="1"
@@ -29,7 +45,15 @@
             :checked="modelValue == 1"
             @click="$emit('update:modelValue', $event.target.value)"
         />
-        <label :for="widgetId + '-evaluation-option-Intermediate'" class="option">Intermediate</label>
+        <label
+          :for="widgetId + '-evaluation-option-Intermediate'"
+          :class="{
+            option: true,
+            active: modelValue == 1
+          }"
+        >
+          Intermediate
+        </label>
         <input
             class="selectopt"
             value="2"
@@ -39,7 +63,15 @@
             :checked="modelValue == 2"
             @click="$emit('update:modelValue', $event.target.value)"
         />
-        <label :for="widgetId + '-evaluation-option-Advanced'" class="option">Advanced</label>
+        <label
+          :for="widgetId + '-evaluation-option-Advanced'"
+          :class="{
+            option: true,
+            active: modelValue == 2
+          }"
+        >
+          Advanced
+        </label>
     </div>
 </template>
 

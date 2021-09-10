@@ -10,7 +10,7 @@
           :key="possbileInterviewer"
         >
           <input type="checkbox" :id="possbileInterviewer" :value="possbileInterviewer" v-model="formValues.interviewers" />  
-          <label :for="possbileInterviewer">{{ possbileInterviewer }}</label>
+          <label :for="possbileInterviewer" class="interviewerName">{{ possbileInterviewer }}</label>
         </span> 
       </div>
       <div :style="{marginTop: '7px'}">
@@ -59,20 +59,16 @@
     <h3>
       Grade <input type="text" v-model="formValues.evaluationGrade" style="margin: 0px 30px 0px 13px; width: 50px;" />
       <input type="radio" id="candidateAccepted" name="candidateAcceptance" value="Accepted" v-model="formValues.evaluationStatus" />
-      <label for="candidateAccepted"> Accepted </label>
+      <label for="candidateAccepted" class="evaluationStatusLabel"> Accepted </label>
       <input type="radio" id="candidateRejected" name="candidateAcceptance" value="Rejected" v-model="formValues.evaluationStatus" />
-      <label for="candidateRejected"> Rejected </label>
+      <label for="candidateRejected" class="evaluationStatusLabel"> Rejected </label>
     </h3>
   </section>
   <section>
     <h3> Comments & Observations </h3>
     <textarea v-model="formValues.commentsAndObservations" rows="10" style="width: 100%"></textarea>
   </section>
-  <div>
-    <pre>
-      {{ JSON.stringify(formValues, null, 2) }}
-    </pre>
-  </div>
+  <button class="export-report-btn" @click="downloadPdf"> <i class="fa fa-file-download"> </i> </button>
 </template>
 
 <script>
@@ -103,6 +99,42 @@ export default {
     }
   },
   methods: {
+    downloadPdf() {
+      window.html2canvas(
+        document.getElementById('app'), {
+          ignoreElements: (element) => {
+            const { type = '', tagName = '', className = '' } = element;
+            if(type === 'checkbox' || type === 'radio') {
+              return true;
+            }
+            if(tagName.toLowerCase() === 'button') {
+              return true;
+            }
+            if(tagName.toLowerCase() === 'label' && className.indexOf('interviewerName') !== -1) {
+              const interviewerName = element.getAttribute('for');
+              return this.formValues.interviewers.indexOf(interviewerName) === -1;
+            }
+            if(tagName.toLowerCase() === 'label' && className.indexOf('evaluationStatusLabel') !== -1) {
+              const candidateAcceptance = element.innerText;
+              return this.formValues.evaluationStatus.trim() !== candidateAcceptance.trim();
+            }
+            if(tagName.toLowerCase() === 'label' && className.indexOf('option') !== -1) {
+              const forAttrValue = element.getAttribute('for');
+              if(forAttrValue.indexOf('evaluation-dd') !== -1 && className.indexOf('active') === -1) {
+                return true;
+              }
+            }
+            return false;
+          }
+        })
+        .then(function(canvas) {
+          const img = canvas.toDataURL("image/png");
+          let link = document.createElement('a');
+          link.download = 'filename.png';
+          link.href = img;
+          link.click();
+        });
+    },
     getTodayDate() {
       const today = new Date();
       let day = today.getDate();
@@ -164,5 +196,44 @@ export default {
     color: black;
     border-color: black;
     font-weight: normal;
+  }
+  .export-report-btn {
+    position: fixed;
+    bottom: 45px;
+    right: 45px;
+    z-index: 9999;
+    background: #DE411B;
+    color: white;
+    font-size: 21px;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.3);
+    transform: scale(1);
+    animation: pulse 1.5s infinite;
+  }
+  .export-report-btn:hover {
+    background: rgb(255, 123, 0);
+  }
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.3);
+    }
+
+    50% {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 15px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
   }
 </style>
