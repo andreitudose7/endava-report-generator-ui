@@ -5,7 +5,7 @@
       <div>
         <label :style="{marginRight: '17px'}"> Evaluator’s name: </label> 
         <span
-          :style="{marginRight: '7px'}"
+          :style="{marginRight: '11px'}"
           v-for="possbileInterviewer in interviewersDS" 
           :key="possbileInterviewer"
         >
@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      interviewersDS: ['Andrei Tudose', 'Stefan Ioan Adrian', 'Marian Costel Brinza', 'Ionut Cristian Stoica'],
+      interviewersDS: evaluationForm.head.interviewers['frontEnd'],
       formValues: {
         interviewers: [],
         interviewDate: this.getTodayDate(),
@@ -91,7 +91,7 @@ export default {
         overallExperience: '',
         jsExperience: '',
         cssHtmlHttpExperience: '',
-        evaluation: evaluationForm,
+        evaluation: evaluationForm.questions,
         evaluationGrade: '',
         evaluationStatus: 'Not-Setted',
         commentsAndObservations: ''
@@ -140,6 +140,7 @@ export default {
       let day = today.getDate();
       if(day < 10) day = '0' + day;
       let month = today.getMonth();
+      month ++;
       if(month < 10) month = '0' + month;
       let year = today.getFullYear();
       return `${year}-${month}-${day}` 
