@@ -74,7 +74,18 @@
 <script>
 import RatingFaces from './components/RatingFaces.vue';
 import RatingDropdown from './components/RatingDropdown.vue';
-import evaluationForm from './interview-questions/evaluationFormat';
+import evaluationFormat from './interview-questions/evaluationFormat';
+
+setTimeout(() => {
+  if(localStorage.getItem('evaluation-form')) {
+    let resetEvaluation = confirm('Doresti sa incepi o evaluare noua?');
+    if(resetEvaluation) {
+      localStorage.removeItem('evaluation-form');
+      window.location.reload();
+    }
+  }
+}, 700)
+
 export default {
   name: 'App',
   components: {
@@ -83,19 +94,29 @@ export default {
   },
   data() {
     return {
-      interviewersDS: evaluationForm.head.interviewers['frontEnd'],
-      formValues: {
-        interviewers: [],
-        interviewDate: this.getTodayDate(),
-        candidateName: '',
-        overallExperience: '',
-        jsExperience: '',
-        cssHtmlHttpExperience: '',
-        evaluation: evaluationForm.questions,
-        evaluationGrade: '',
-        evaluationStatus: 'Not-Setted',
-        commentsAndObservations: ''
-      }
+      interviewersDS: evaluationFormat.head.interviewers['frontEnd'],
+      formValues: localStorage.getItem('evaluation-form') ? 
+          JSON.parse(localStorage.getItem('evaluation-form'))
+        : {
+            interviewers: [],
+            interviewDate: this.getTodayDate(),
+            candidateName: '',
+            overallExperience: '',
+            jsExperience: '',
+            cssHtmlHttpExperience: '',
+            evaluation: evaluationFormat.questions,
+            evaluationGrade: '',
+            evaluationStatus: 'Not-Setted',
+            commentsAndObservations: ''
+          }
+    }
+  },
+  watch: {
+    'formValues': {
+      handler: function () {
+        localStorage.setItem('evaluation-form', JSON.stringify(this.formValues))
+      },
+      deep: true
     }
   },
   methods: {
@@ -144,9 +165,6 @@ export default {
       if(month < 10) month = '0' + month;
       let year = today.getFullYear();
       return `${year}-${month}-${day}` 
-    },
-    evaluateCheckpoint(points) {
-      console.log(points)
     }
   }
 }
