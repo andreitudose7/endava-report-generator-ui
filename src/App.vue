@@ -83,11 +83,13 @@
     <textarea v-model="formValues.commentsAndObservations" rows="10" style="width: 100%"></textarea>
   </section>
   <button class="export-report-btn" @click="downloadPdf"> <i class="fa fa-file-download"> </i> </button>
+  <ApplicationFooter />
 </template>
 
 <script>
 import RatingFaces from './components/RatingFaces.vue';
 import RatingDropdown from './components/RatingDropdown.vue';
+import ApplicationFooter from './components/ApplicationFooter.vue';
 import Tooltip from './components/Tooltip.vue';
 import evaluationFormat from './interview-questions/evaluationFormat';
 
@@ -107,6 +109,7 @@ export default {
     RatingFaces,
     RatingDropdown,
     Tooltip,
+    ApplicationFooter,
   },
   data() {
     return {
@@ -274,4 +277,30 @@ export default {
       box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
     }
   }
+
+  
+  /* Scrollbar Styling */
+  /* width */
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #888;
+  }
+  /**********************/
 </style>
