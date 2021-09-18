@@ -38,15 +38,29 @@
   </section>
   <section v-for="(category, categoryIndex) in formValues.evaluation" :key="category.areaName">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h3> {{ category.areaName }} </h3>
+      <h3>
+        {{ category.areaName }}
+        <Tooltip
+          :available="category.description"
+          faIconName="fa-question-circle"
+          :message="category.description || 'No description yet'"
+        />
+      </h3>
       <RatingDropdown
         :widget-id="category.areaName + '-evaluation-dd'"
         v-model="formValues.evaluation[categoryIndex].points"
       />
     </div>
 
-    <div v-for="(checkpoints, checkpointIndex) in category.checkpoints" :key="checkpoints.title" style="display: flex; justify-content: space-between;">
-      <p> {{ checkpoints.title }} </p>
+    <div v-for="(checkpoint, checkpointIndex) in category.checkpoints" :key="checkpoint.title" style="display: flex; justify-content: space-between;">
+      <p>
+        {{ checkpoint.title }}
+        <Tooltip
+          :available="checkpoint.description"
+          faIconName="fa-question-circle"
+          :message="checkpoint.description || 'No description yet'"
+        />  
+      </p>
       <RatingFaces
         :widget-id="'rating-' + categoryIndex + '-' + checkpointIndex"
         :category-index="categoryIndex"
@@ -74,6 +88,7 @@
 <script>
 import RatingFaces from './components/RatingFaces.vue';
 import RatingDropdown from './components/RatingDropdown.vue';
+import Tooltip from './components/Tooltip.vue';
 import evaluationFormat from './interview-questions/evaluationFormat';
 
 setTimeout(() => {
@@ -90,7 +105,8 @@ export default {
   name: 'App',
   components: {
     RatingFaces,
-    RatingDropdown
+    RatingDropdown,
+    Tooltip,
   },
   data() {
     return {
@@ -129,6 +145,9 @@ export default {
               return true;
             }
             if(tagName.toLowerCase() === 'button') {
+              return true;
+            }
+            if(className.indexOf('tooltip-container') !== -1) {
               return true;
             }
             if(tagName.toLowerCase() === 'label' && className.indexOf('interviewerName') !== -1) {
