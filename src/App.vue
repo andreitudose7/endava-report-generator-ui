@@ -1,41 +1,40 @@
 <template>
-  <header>
-    <h2> Javascript Interview Report </h2>
-    <h3>
-      <div>
-        <label :style="{marginRight: '17px'}"> Evaluator’s name: </label> 
-        <span
-          :style="{marginRight: '11px'}"
-          v-for="possbileInterviewer in interviewersDS" 
-          :key="possbileInterviewer"
-        >
-          <input type="checkbox" :id="possbileInterviewer" :value="possbileInterviewer" v-model="formValues.interviewers" />  
-          <label :for="possbileInterviewer" class="interviewerName">{{ possbileInterviewer }}</label>
-        </span> 
-      </div>
-      <div :style="{marginTop: '7px'}">
-        Interview Date: <span :style="{marginLeft: '17px'}"> <input type="date" v-model="formValues.interviewDate" /> </span>
-      </div>
-    </h3>
+  <header style="display: flex; justify-content: space-between;">
+    <section>
+      <h2> Front-End Interview Report </h2>
+      <h3>
+        <div>
+          <label :style="{marginRight: '17px'}"> Evaluator’s name: </label> 
+          <span
+            :style="{marginRight: '11px'}"
+            v-for="possbileInterviewer in interviewersDS" 
+            :key="possbileInterviewer"
+          >
+            <input type="checkbox" :id="possbileInterviewer" :value="possbileInterviewer" v-model="formValues.interviewers" />  
+            <label :for="possbileInterviewer" class="interviewerName">{{ possbileInterviewer }}</label>
+          </span> 
+        </div>
+        <div :style="{marginTop: '7px'}">
+          Interview Date: <span :style="{marginLeft: '17px'}"> <input type="date" v-model="formValues.interviewDate" /> </span>
+        </div>
+      </h3>
+    </section>
+    <section>
+      <h2> Candidate Details </h2>
+      <h3>
+        <label> Candidate’s name: </label> 
+        <input type="text" style="margin-left: 8px; margin-right: 10px; width: 280px;" v-model="formValues.candidateName" />
+      </h3>
+      <h3>
+        <label> Experience - Overall Programming (years): </label> 
+        <input type="number" v-model="formValues.overallExperience" placeholder="Years" />
+        <label> - JS (years): </label> 
+        <input type="number" v-model="formValues.jsExperience" placeholder="Years" />
+        <label> - UI/UX (years): </label> 
+        <input type="number" v-model="formValues.cssHtmlHttpExperience" placeholder="Years" />
+      </h3>
+    </section>
   </header>
-  <section>
-    <h3>
-      <label :style="{marginRight: '17px'}"> Candidate’s name: </label> 
-      <input type="text" v-model="formValues.candidateName" />
-    </h3>
-    <h3>
-      <label :style="{marginRight: '17px'}"> Overall Programming Experience: </label> 
-      <input type="text" v-model="formValues.overallExperience" />
-    </h3>
-    <h3>
-      <label :style="{marginRight: '17px'}"> Javascript Experience: </label> 
-      <input type="text" v-model="formValues.jsExperience" />
-    </h3>
-    <h3>
-      <label :style="{marginRight: '17px'}"> HTML/CSS/HTTP Experience: </label> 
-      <input type="text" v-model="formValues.cssHtmlHttpExperience" />
-    </h3>
-  </section>
   <section v-for="(category, categoryIndex) in formValues.evaluation" :key="category.areaName">
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <h3>
@@ -46,9 +45,22 @@
           :message="category.description || 'No description yet'"
         />
       </h3>
-      <RatingDropdown
+      <Dropdown
         :widget-id="category.areaName + '-evaluation-dd'"
         v-model="formValues.evaluation[categoryIndex].points"
+        :dataSource="[{
+            label: 'None',
+            value: -1
+          }, {
+            label: 'Beginner',
+            value: 0
+          }, {
+            label: 'Intermediate',
+            value: 1,
+          }, {
+            label: 'Advanced',
+            value: 2
+          }]"
       />
     </div>
 
@@ -70,13 +82,78 @@
     </div>
   </section>
   <section>
-    <h3>
-      Grade <input type="text" v-model="formValues.evaluationGrade" style="margin: 0px 30px 0px 13px; width: 50px;" />
-      <input type="radio" id="candidateAccepted" name="candidateAcceptance" value="Accepted" v-model="formValues.evaluationStatus" />
-      <label for="candidateAccepted" class="evaluationStatusLabel"> Accepted </label>
-      <input type="radio" id="candidateRejected" name="candidateAcceptance" value="Rejected" v-model="formValues.evaluationStatus" />
-      <label for="candidateRejected" class="evaluationStatusLabel"> Rejected </label>
-    </h3>
+    <div style="display: inline-flex; align-items: center;">
+      <h3 style="margin-right: 25px;"> Grade </h3>
+      <Dropdown
+        widget-id="grade-selection-dd"
+        v-model="formValues.evaluationGrade"
+        extraClassName="grade-selection-dd"
+        :dataSource="[{
+            label: 'Rejected',
+            value: -1
+          }, {
+            label: 'Junior Developer (JT)',
+            value: 0
+          }, {
+            label: 'Developer (TL)',
+            value: 1,
+          }, {
+            label: 'Developer (ST)',
+            value: 2
+          }, {
+            label: 'Senior Developer (EN)',
+            value: 3
+          }, {
+            label: 'Senior Developer (SE)',
+            value: 4
+          }, {
+            label: 'Discipline Lead (CL)',
+            value: 5
+          }, {
+            label: 'Development Lead (CL)',
+            value: 6
+          }, {
+            label: 'Development Consultant (CL)',
+            value: 7
+          }, {
+            label: 'Design Lead (CL)',
+            value: 8
+          }, {
+            label: 'Senior Development Lead (SC)',
+            value: 9
+          }, {
+            label: 'Senior Development Consultant (SC)',
+            value: 10
+          }, {
+            label: 'Head of Development (SC)',
+            value: 11
+          }, {
+            label: 'Design Lead (SC)',
+            value: 12
+          }, {
+            label: 'Principal Development Consultant (ML)',
+            value: 13
+          }, {
+            label: 'Head of Development (ML)',
+            value: 14
+          }, {
+            label: 'Discipline Lead (ML)',
+            value: 15
+          }, {
+            label: 'Design Authority (ML)',
+            value: 16
+          }, {
+            label: 'Group Head of Development (SM)',
+            value: 17
+          }, {
+            label: 'Group Head of Code Quality (SM)',
+            value: 18
+          }, {
+            label: 'Design Authority (SM)',
+            value: 19
+          }]"
+      />
+    </div>
   </section>
   <section>
     <h3> Comments & Observations </h3>
@@ -88,7 +165,7 @@
 
 <script>
 import RatingFaces from './components/RatingFaces.vue';
-import RatingDropdown from './components/RatingDropdown.vue';
+import Dropdown from './components/Dropdown.vue';
 import ApplicationFooter from './components/ApplicationFooter.vue';
 import Tooltip from './components/Tooltip.vue';
 import evaluationFormat from './interview-questions/evaluationFormat';
@@ -107,7 +184,7 @@ export default {
   name: 'App',
   components: {
     RatingFaces,
-    RatingDropdown,
+    Dropdown,
     Tooltip,
     ApplicationFooter,
   },
@@ -124,8 +201,7 @@ export default {
             jsExperience: '',
             cssHtmlHttpExperience: '',
             evaluation: evaluationFormat.questions,
-            evaluationGrade: '',
-            evaluationStatus: 'Not-Setted',
+            evaluationGrade: -1,
             commentsAndObservations: ''
           }
     }
@@ -153,13 +229,12 @@ export default {
             if(className.indexOf('tooltip-container') !== -1) {
               return true;
             }
+            if(className.indexOf('application-footer') !== -1) {
+              return true;
+            }
             if(tagName.toLowerCase() === 'label' && className.indexOf('interviewerName') !== -1) {
               const interviewerName = element.getAttribute('for');
               return this.formValues.interviewers.indexOf(interviewerName) === -1;
-            }
-            if(tagName.toLowerCase() === 'label' && className.indexOf('evaluationStatusLabel') !== -1) {
-              const candidateAcceptance = element.innerText;
-              return this.formValues.evaluationStatus.trim() !== candidateAcceptance.trim();
             }
             if(tagName.toLowerCase() === 'label' && className.indexOf('option') !== -1) {
               const forAttrValue = element.getAttribute('for');
@@ -197,10 +272,11 @@ export default {
   body {
     font-family: 'Oswald', sans-serif;
   }
+  #app {
+    margin: 0px 0px 600px;
+  }
   header {
-    border-bottom: 3px solid;
     color: hsl(0, 89%, 62%);
-    padding: 0px 15px;
   }
   input { 
     font-family: 'Oswald', sans-serif;
@@ -222,6 +298,14 @@ export default {
   input[type="radio"], input[type="radio"] + label {
     cursor: pointer;
   }
+  input[type="number"] {
+    width: 47px;
+    margin: 0px 10px 0px 8px;
+  }
+  header input[type="text"],
+  header input[type="number"] {
+    font-weight: bold;
+  }
   textarea {
     font-family: 'Oswald', sans-serif;
   }
@@ -237,6 +321,18 @@ export default {
     color: black;
     border-color: black;
     font-weight: normal;
+  }
+  header section {
+    width: 100%;
+    display: inline-block;
+    background: #f3ffdd;
+  }
+  .interviewerName {
+    color: black;
+    font-weight: normal;
+  }
+  .grade-selection-dd {
+    width: 250px;
   }
   .export-report-btn {
     position: fixed;

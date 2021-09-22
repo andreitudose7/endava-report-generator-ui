@@ -1,5 +1,5 @@
 <template>
-  <div class='application-footer'> Application created by Andrei Tudose (2D) for Endava. Copyright © 2021 Tudose Andrei, All rights reserved </div>
+  <div class='application-footer'> Report Generator Application created by Andrei Tudose (2D) for Endava PTD </div>
 </template>
 
 <script>
