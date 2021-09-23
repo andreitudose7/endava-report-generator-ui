@@ -4,15 +4,17 @@
       <h2> Front-End Interview Report </h2>
       <h3>
         <div>
-          <label :style="{marginRight: '17px'}"> Evaluator’s name: </label> 
-          <span
-            :style="{marginRight: '11px'}"
+          <label :style="{marginRight: '17px'}"> Evaluator’s name: </label>
+          <label
+            class="interviewerName"
+            :style="{marginRight: '5px'}"
             v-for="possbileInterviewer in interviewersDS" 
             :key="possbileInterviewer"
           >
+            {{ possbileInterviewer }}
             <input type="checkbox" :id="possbileInterviewer" :value="possbileInterviewer" v-model="formValues.interviewers" />  
-            <label :for="possbileInterviewer" class="interviewerName">{{ possbileInterviewer }}</label>
-          </span> 
+            <span class="checkmark"></span>
+          </label>
         </div>
         <div :style="{marginTop: '7px'}">
           Interview Date: <span :style="{marginLeft: '17px'}"> <input type="date" v-model="formValues.interviewDate" /> </span>
@@ -85,7 +87,7 @@
     <div style="display: inline-flex; align-items: center;">
       <h3 style="margin-right: 25px;"> Grade </h3>
       <Dropdown
-        widget-id="grade-selection-dd"
+        widget-id="grade-evaluation-dd"
         v-model="formValues.evaluationGrade"
         extraClassName="grade-selection-dd"
         :dataSource="[{
@@ -158,6 +160,7 @@
   <section>
     <h3> Comments & Observations </h3>
     <textarea v-model="formValues.commentsAndObservations" rows="10" style="width: 100%"></textarea>
+    <div id="commentsAndObservationsInvisibleContainerForPngScreenshot"> {{ formValues.commentsAndObservations }} </div>
   </section>
   <button class="export-report-btn" @click="downloadPdf"> <i class="fa fa-file-download"> </i> </button>
   <ApplicationFooter />
@@ -220,7 +223,10 @@ export default {
         document.getElementById('app'), {
           ignoreElements: (element) => {
             const { type = '', tagName = '', className = '' } = element;
-            if(type === 'checkbox' || type === 'radio') {
+            if(type === 'checkbox' || type === 'radio' || className.indexOf('checkmark') !== -1) {
+              return true;
+            }
+            if(tagName.toLowerCase() === 'textarea') {
               return true;
             }
             if(tagName.toLowerCase() === 'button') {
@@ -233,7 +239,7 @@ export default {
               return true;
             }
             if(tagName.toLowerCase() === 'label' && className.indexOf('interviewerName') !== -1) {
-              const interviewerName = element.getAttribute('for');
+              const interviewerName = element.innerText.trim();
               return this.formValues.interviewers.indexOf(interviewerName) === -1;
             }
             if(tagName.toLowerCase() === 'label' && className.indexOf('option') !== -1) {
@@ -243,12 +249,15 @@ export default {
               }
             }
             return false;
+          },
+          onclone: (clonedDoc) => {
+            clonedDoc.getElementById('commentsAndObservationsInvisibleContainerForPngScreenshot').style.display = 'block';
           }
         })
-        .then(function(canvas) {
+        .then((canvas) => {
           const img = canvas.toDataURL("image/png");
           let link = document.createElement('a');
-          link.download = 'filename.png';
+          link.download = `${this.formValues.candidateName} - FrontEnd Interview Report.png`;
           link.href = img;
           link.click();
         });
@@ -276,7 +285,7 @@ export default {
     margin: 0px 0px 600px;
   }
   header {
-    color: hsl(0, 89%, 62%);
+    color: #8A8A8A;
   }
   input { 
     font-family: 'Oswald', sans-serif;
@@ -306,31 +315,119 @@ export default {
   header input[type="number"] {
     font-weight: bold;
   }
+
+  #commentsAndObservationsInvisibleContainerForPngScreenshot,
   textarea {
     font-family: 'Oswald', sans-serif;
+    font-size: 17px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+  #commentsAndObservationsInvisibleContainerForPngScreenshot {
+    display: none;
+    min-height: 100px;
   }
   section {
     box-shadow: 0px 0px 4px #888888bb;
     padding: 10px 25px;
-    margin: 15px 10px;
-    width: calc(33% - 70px);
+    margin: 10px 10px;
+    width: calc(33% - 65px);
     min-width: 300px;
     display: inline-grid;
   }
   section input {
-    color: black;
-    border-color: black;
+    color: #B8B8B8;
+    border-color: #8A8A8A;
     font-weight: normal;
   }
   header section {
     width: 100%;
     display: inline-block;
-    background: #f3ffdd;
+    margin: 10px 5px;
+    background: #333333;
   }
-  .interviewerName {
-    color: black;
-    font-weight: normal;
-  }
+
+
+
+
+  /* The container */
+.interviewerName {
+  position: relative;
+  padding-left: 23px;
+  cursor: pointer;
+  font-size: 19px;
+  color: #B8B8B8;
+  font-weight: normal;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.interviewerName input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 8px;
+  left: 0px;
+  height: 15px;
+  width: 15px;
+  border-radius: 3px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.interviewerName:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.interviewerName input:checked ~ .checkmark {
+  background-color: red;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.interviewerName input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.interviewerName .checkmark:after {
+  left: 5px;
+  top: 2px;
+  width: 2px;
+  height: 6px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+
+
+
+
+
+
+
   .grade-selection-dd {
     width: 250px;
   }
