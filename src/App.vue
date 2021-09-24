@@ -91,68 +91,71 @@
         v-model="formValues.evaluationGrade"
         extraClassName="grade-selection-dd"
         :dataSource="[{
-            label: 'Rejected',
+            label: 'None',
             value: -1
-          }, {
-            label: 'Junior Developer (JT)',
+          },{
+            label: 'Rejected',
             value: 0
           }, {
-            label: 'Developer (TL)',
-            value: 1,
+            label: 'Junior Developer (JT)',
+            value: 1
           }, {
-            label: 'Developer (ST)',
+            label: 'Developer (TL)',
             value: 2
           }, {
-            label: 'Senior Developer (EN)',
+            label: 'Developer (ST)',
             value: 3
           }, {
-            label: 'Senior Developer (SE)',
+            label: 'Senior Developer (EN)',
             value: 4
           }, {
-            label: 'Discipline Lead (CL)',
+            label: 'Senior Developer (SE)',
             value: 5
           }, {
-            label: 'Development Lead (CL)',
+            label: 'Discipline Lead (CL)',
             value: 6
           }, {
-            label: 'Development Consultant (CL)',
+            label: 'Development Lead (CL)',
             value: 7
           }, {
-            label: 'Design Lead (CL)',
+            label: 'Development Consultant (CL)',
             value: 8
           }, {
-            label: 'Senior Development Lead (SC)',
+            label: 'Design Lead (CL)',
             value: 9
           }, {
-            label: 'Senior Development Consultant (SC)',
+            label: 'Senior Development Lead (SC)',
             value: 10
           }, {
-            label: 'Head of Development (SC)',
+            label: 'Senior Development Consultant (SC)',
             value: 11
           }, {
-            label: 'Design Lead (SC)',
+            label: 'Head of Development (SC)',
             value: 12
           }, {
-            label: 'Principal Development Consultant (ML)',
+            label: 'Design Lead (SC)',
             value: 13
           }, {
-            label: 'Head of Development (ML)',
+            label: 'Principal Development Consultant (ML)',
             value: 14
           }, {
-            label: 'Discipline Lead (ML)',
+            label: 'Head of Development (ML)',
             value: 15
           }, {
-            label: 'Design Authority (ML)',
+            label: 'Discipline Lead (ML)',
             value: 16
           }, {
-            label: 'Group Head of Development (SM)',
+            label: 'Design Authority (ML)',
             value: 17
           }, {
-            label: 'Group Head of Code Quality (SM)',
+            label: 'Group Head of Development (SM)',
             value: 18
           }, {
-            label: 'Design Authority (SM)',
+            label: 'Group Head of Code Quality (SM)',
             value: 19
+          }, {
+            label: 'Design Authority (SM)',
+            value: 20
           }]"
       />
     </div>
@@ -218,7 +221,55 @@ export default {
     }
   },
   methods: {
+    displayErrorMessage(headingMsg = '', msg = '') {
+      window.$.toast({
+        heading: headingMsg,
+        text: msg,
+        position: {
+          right: 100,
+          top: 40
+        },
+        showHideTransition: 'fade',
+        icon: 'error'
+      });
+    },
+    checkDataValidaty() {
+      const {
+        candidateName = '',
+        interviewers = [],
+        overallExperience = '',
+        jsExperience = '',
+        cssHtmlHttpExperience = '',
+        evaluationGrade = -1,
+        commentsAndObservations = ''
+      } = this.formValues;
+
+      if(!interviewers.length) {
+        this.displayErrorMessage('Campuri obligatorii necompletate', 'Te rog sa completezi lista cu intervievatorii!')
+        return false;
+      }
+      if(!candidateName.length) {
+        this.displayErrorMessage('Campuri obligatorii necompletate', 'Te rog sa completezi numele celui intervievat!')
+        return false;
+      }
+      if(!overallExperience.toString().length || !jsExperience.toString().length || !cssHtmlHttpExperience.toString().length) {
+        this.displayErrorMessage('Campuri obligatorii necompletate', 'Te rog sa completezi campurile pentru experienta!')
+        return false;
+      }
+      if(evaluationGrade == -1) {
+        this.displayErrorMessage('Campuri obligatorii necompletate', 'Te rog sa completezi gradul la care l-ai incadra pe cel intervievat!')
+        return false;
+      }
+      if(!commentsAndObservations.length) {
+        this.displayErrorMessage('Campuri obligatorii necompletate', 'Te rog sa introduci un comentariu pentru cel intervievat!')
+        return false;
+      }
+      return true;
+    },
     downloadPdf() {
+      if(!this.checkDataValidaty()) {
+        return;
+      }
       window.html2canvas(
         document.getElementById('app'), {
           ignoreElements: (element) => {
@@ -349,84 +400,74 @@ export default {
     background: #333333;
   }
 
-
-
-
   /* The container */
-.interviewerName {
-  position: relative;
-  padding-left: 23px;
-  cursor: pointer;
-  font-size: 19px;
-  color: #B8B8B8;
-  font-weight: normal;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+  .interviewerName {
+    position: relative;
+    padding-left: 23px;
+    cursor: pointer;
+    font-size: 19px;
+    color: #B8B8B8;
+    font-weight: normal;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
-/* Hide the browser's default checkbox */
-.interviewerName input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
+  /* Hide the browser's default checkbox */
+  .interviewerName input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
 
-/* Create a custom checkbox */
-.checkmark {
-  position: absolute;
-  top: 8px;
-  left: 0px;
-  height: 15px;
-  width: 15px;
-  border-radius: 3px;
-  background-color: #eee;
-}
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 8px;
+    left: 0px;
+    height: 15px;
+    width: 15px;
+    border-radius: 3px;
+    background-color: #eee;
+  }
 
-/* On mouse-over, add a grey background color */
-.interviewerName:hover input ~ .checkmark {
-  background-color: #ccc;
-}
+  /* On mouse-over, add a grey background color */
+  .interviewerName:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
 
-/* When the checkbox is checked, add a blue background */
-.interviewerName input:checked ~ .checkmark {
-  background-color: red;
-}
+  /* When the checkbox is checked, add a blue background */
+  .interviewerName input:checked ~ .checkmark {
+    background-color: red;
+  }
 
-/* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
 
-/* Show the checkmark when checked */
-.interviewerName input:checked ~ .checkmark:after {
-  display: block;
-}
+  /* Show the checkmark when checked */
+  .interviewerName input:checked ~ .checkmark:after {
+    display: block;
+  }
 
-/* Style the checkmark/indicator */
-.interviewerName .checkmark:after {
-  left: 5px;
-  top: 2px;
-  width: 2px;
-  height: 6px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-
-
-
-
-
-
-
+  /* Style the checkmark/indicator */
+  .interviewerName .checkmark:after {
+    left: 5px;
+    top: 2px;
+    width: 2px;
+    height: 6px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
 
   .grade-selection-dd {
     width: 250px;
@@ -471,7 +512,7 @@ export default {
     }
   }
 
-  
+
   /* Scrollbar Styling */
   /* width */
   ::-webkit-scrollbar {
