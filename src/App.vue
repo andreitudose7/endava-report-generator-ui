@@ -328,9 +328,9 @@ export default {
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
   body {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
   }
   #app {
     margin: 0px 0px 600px;
@@ -339,7 +339,7 @@ export default {
     color: #8A8A8A;
   }
   input { 
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
     background: transparent;
     color: hsl(0, 89%, 62%);
     border-width: 2px;
@@ -365,11 +365,12 @@ export default {
   header input[type="text"],
   header input[type="number"] {
     font-weight: bold;
+    font-size: 18px;
   }
 
   #commentsAndObservationsInvisibleContainerForPngScreenshot,
   textarea {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
     font-size: 17px;
     padding: 10px;
     box-sizing: border-box;
@@ -426,7 +427,7 @@ export default {
   /* Create a custom checkbox */
   .checkmark {
     position: absolute;
-    top: 8px;
+    top: 4px;
     left: 0px;
     height: 15px;
     width: 15px;
