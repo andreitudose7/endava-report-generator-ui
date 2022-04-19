@@ -8,6 +8,7 @@ import designPatterns from './question-categories/designPatterns';
 import designPrinciples from './question-categories/designPrinciples';
 import moduleLoaders from './question-categories/moduleLoaders';
 import frameworks from './question-categories/frameworks';
+import react from './question-categories/react';
 import build from './question-categories/build';
 import testing from './question-categories/testing';
 import versionControl from './question-categories/versionControl';
@@ -27,6 +28,7 @@ export default {
         designPrinciples,
         moduleLoaders,
         frameworks,
+        react,
         build,
         testing,
         versionControl,
