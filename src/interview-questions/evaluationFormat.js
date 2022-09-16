@@ -1,5 +1,4 @@
 import interviewers from './question-categories/interviewers'
-import general from './question-categories/general';
 import http from './question-categories/http';
 import html from './question-categories/html';
 import css from './question-categories/css';
@@ -19,11 +18,10 @@ export default {
         interviewers
     },
     questions: [
-        general,
-        http,
         html,
         css,
         js,
+        http,
         designPatterns,
         designPrinciples,
         moduleLoaders,

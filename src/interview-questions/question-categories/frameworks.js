@@ -25,5 +25,6 @@ export default {
     },{
         title: 'Sencha',
         points: -1
-    }]
+    }],
+    comments: ''
 }

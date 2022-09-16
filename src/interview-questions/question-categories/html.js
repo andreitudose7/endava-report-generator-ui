@@ -5,6 +5,12 @@ export default {
         title: 'Doctype',
         points: -1
     },{
+        title: 'Page structure',
+        points: -1
+    },{
+        title: 'HTML5',
+        points: -1
+    },{
         title: 'Standard /quirks mode',
         points: -1
     },{
@@ -19,8 +25,6 @@ export default {
     },{
         title: 'FORMs',
         points: -1
-    },{
-        title: 'Page structure',
-        points: -1
-    }]
+    }],
+    comments: ''
 }

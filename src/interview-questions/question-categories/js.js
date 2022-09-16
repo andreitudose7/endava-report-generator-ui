@@ -64,5 +64,6 @@ export default {
     },{
         title: 'ES6 classes',
         points: -1
-    }]
+    }],
+    comments: ''
 }

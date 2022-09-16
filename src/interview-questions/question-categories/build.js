@@ -16,5 +16,6 @@ export default {
     },{
         title: 'Others?',
         points: -1
-    },]
+    }],
+    comments: ''
 }

@@ -13,5 +13,6 @@ export default {
     },{
         title: 'TDD Principle',
         points: -1
-    }]
+    }],
+    comments: ''
 }

@@ -4,5 +4,6 @@ export default {
     checkpoints: [{
         title: '(KISS, DRY, YAGNI, SOLID)',
         points: -1
-    }]
+    }],
+    comments: ''
 }

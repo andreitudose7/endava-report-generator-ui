@@ -40,7 +40,7 @@ export default {
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 160px;
+  width: 175px;
   height: 40px;
 }
 

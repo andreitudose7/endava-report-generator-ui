@@ -34,5 +34,6 @@ export default {
     },{
         title: 'FLUX',
         points: -1
-    }]
+    }],
+    comments: ''
 }

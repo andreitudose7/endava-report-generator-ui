@@ -13,5 +13,6 @@ export default {
     },{
         title: 'CVS',
         points: -1
-    }]
+    }],
+    comments: ''
 }

@@ -51,17 +51,29 @@
         :widget-id="category.areaName + '-evaluation-dd'"
         v-model="formValues.evaluation[categoryIndex].points"
         :dataSource="[{
-            label: 'None',
+            label: 'Not Selected',
             value: -1
           }, {
-            label: 'Beginner',
+            label: 'JT - Junior Technician',
             value: 0
           }, {
-            label: 'Intermediate',
+            label: 'TL - Technician',
             value: 1,
           }, {
-            label: 'Advanced',
+            label: 'ST - Senior Technician',
             value: 2
+          }, {
+            label: 'EN - Engineer',
+            value: 3
+          }, {
+            label: 'SE - Senior Engineer',
+            value: 4
+          }, {
+            label: 'CL - Consultant',
+            value: 5
+          }, {
+            label: 'SC - Senior Consultant',
+            value: 6
           }]"
       />
     </div>
@@ -82,6 +94,10 @@
         v-model="formValues.evaluation[categoryIndex].checkpoints[checkpointIndex].points"
       />
     </div>
+
+    <h3> Comments </h3>
+    <textarea v-model="formValues.evaluation[categoryIndex].comments" rows="5" style="width: 100%; resize: none;"></textarea>
+    <div :id="'commentsForCategory-' + categoryIndex"> {{ formValues.evaluation[categoryIndex].comments }} </div>
   </section>
   <section>
     <div style="display: inline-flex; align-items: center;">
@@ -161,7 +177,7 @@
     </div>
   </section>
   <section>
-    <h3> Comments & Observations </h3>
+    <h3> Technical & Behavioral Conclusions </h3>
     <textarea v-model="formValues.commentsAndObservations" rows="10" style="width: 100%"></textarea>
     <div id="commentsAndObservationsInvisibleContainerForPngScreenshot"> {{ formValues.commentsAndObservations }} </div>
   </section>
@@ -303,6 +319,9 @@ export default {
           },
           onclone: (clonedDoc) => {
             clonedDoc.getElementById('commentsAndObservationsInvisibleContainerForPngScreenshot').style.display = 'block';
+            for(let i = 0 ; i < this.formValues.evaluation.length ; i ++) {
+              clonedDoc.getElementById('commentsForCategory-' + i).style.display = 'block';
+            }
           }
         })
         .then((canvas) => {
@@ -369,6 +388,7 @@ export default {
   }
 
   #commentsAndObservationsInvisibleContainerForPngScreenshot,
+  [id^="commentsForCategory-"],
   textarea {
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 17px;
@@ -377,9 +397,15 @@ export default {
     border-radius: 3px;
     border: 1px solid;
   }
-  #commentsAndObservationsInvisibleContainerForPngScreenshot {
+  #commentsAndObservationsInvisibleContainerForPngScreenshot,
+  [id^="commentsForCategory-"] {
     display: none;
+  }
+  #commentsAndObservationsInvisibleContainerForPngScreenshot {
     min-height: 100px;
+  }
+  [id^="commentsForCategory-"] {
+    min-height: 50px;
   }
   section {
     box-shadow: 0px 0px 4px #888888bb;
